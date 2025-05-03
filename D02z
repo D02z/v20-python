@@ -1,0 +1,27 @@
+import pandas as pd
+
+# Simulated historical prices (in real case, we fetch this from OANDA)
+prices = [1.1000, 1.1010, 1.1020, 1.1035, 1.1045, 1.1030, 1.1020, 1.1005, 1.0995]
+
+# Simple moving averages
+short_window = 3
+long_window = 5
+
+signals = []
+
+for i in range(len(prices)):
+    if i < long_window:
+        signals.append("HOLD")
+        continue
+    short_ma = sum(prices[i-short_window:i]) / short_window
+    long_ma = sum(prices[i-long_window:i]) / long_window
+    if short_ma > long_ma:
+        signals.append("BUY")
+    elif short_ma < long_ma:
+        signals.append("SELL")
+    else:
+        signals.append("HOLD")
+
+print("Price | Signal")
+for price, signal in zip(prices, signals):
+    print(f"{price:.4f} | {signal}")
